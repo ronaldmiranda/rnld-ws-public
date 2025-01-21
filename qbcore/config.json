@@ -1,17 +1,4 @@
 {
   "token": "teste",
-  "debug": true,
-  "comandos": {
-    "item": [
-      "id",
-      "item",
-      "qtd"
-    ],
-    "renomear": [
-      "id",
-      "sobrenome",
-      "nome",
-      "idade"
-    ]
-  }
+  "debug": true
 }
