@@ -2,32 +2,47 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 local prefix = "bot:"
 
-local function toNumber(value)
-    return tonumber(value) or 0
-end
+local serverCommands = {
+    ["item"] = function(data)
+        local id = tonumber(data.id) or 0
+        local item = tostring(data.item or "")
+        local qtd = tonumber(data.qtd) or 0
 
-local function giveItemToUser(userId, itemName, quantity)
-    local source = vRP.getUserSource(userId)
-    if not source then
-        return
-    end
+        return ("Item %s (%d) dado ao jogador %d"):format(item, qtd, id)
+    end,
 
-    vRP.giveInventoryItem(userId, itemName, quantity)
-    local displayName = vRP.itemNameList(itemName)
-    TriggerClientEvent("itensNotify", source, "usar", "Pegou x" .. quantity, displayName)
-end
+    -- "renomear" só um exemplo
+    ["renomear"] = function(data)
+        local id = tonumber(data.id) or 0
+        local nome = data.nome or "SemNome"
+        local sobrenome = data.sobrenome or "SemSobrenome"
+        local idade = tonumber(data.idade) or 0
+        local teste = {
+            a = 'b'
+        }
 
-local events = {
-    ["item"] = function(id, item, qtd)
-        local playerSrc = Player.PlayerData.source
-        local quantity = toNumber(qtd)
-        -- Se for sempre dinheiro, fica igual ao evento "dinheiro".
-        -- Se quiser outro item, é só ajustar 'dinheiro' para outro nome de item.
-        giveItemToUser(userId, item, quantity)
-    end
+        -- Faz alguma lógica de renomear
+        return ("Renomeado ID %d para %s %s (%d anos)"):format(id, nome, sobrenome, idade)
+    end,
 }
 
--- Loop para registrar cada evento de uma só vez
-for eventSuffix, callback in pairs(events) do
-    AddEventHandler(prefix .. eventSuffix, callback)
-end
+AddEventHandler(prefix .. "executeCommand", function(requestId, commandName, data)
+    local src = source
+
+    local handler = serverCommands[commandName]
+    local result = nil
+
+    if handler then
+        -- Executa a função e captura o retorno
+        local status, res = pcall(handler, data)
+        if status then
+            result = res
+        else
+            result = "Erro no handler: " .. tostring(res)
+        end
+    else
+        result = ("Comando '%s' não existente"):format(commandName)
+    end
+
+    TriggerEvent(prefix .. "commandResult", requestId, result)
+end)

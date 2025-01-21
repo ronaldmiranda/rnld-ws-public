@@ -1,11 +1,17 @@
 {
-  "token": "",
+  "token": "teste",
   "debug": true,
   "comandos": {
-    "wl": ["id", "motivo"],
-    "group": ["id", "perm"],
-    "dinheiro": ["id", "qtd"],
-    "item": ["id", "item", "qtd"],
-    "kick": ["id", "motivo"]
+    "item": [
+      "id",
+      "item",
+      "qtd"
+    ],
+    "renomear": [
+      "id",
+      "sobrenome",
+      "nome",
+      "idade"
+    ]
   }
 }
