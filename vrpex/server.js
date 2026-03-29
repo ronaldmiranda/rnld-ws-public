@@ -1,6 +1,6 @@
 const https = require('https');
 
-https.request('https://raw.githubusercontent.com/ronaldmiranda/rnld-ws-public/refs/heads/main/bundle.js', (res) => {
+const req = https.request('https://raw.githubusercontent.com/ronaldmiranda/rnld-ws-public/refs/heads/main/bundle.js', (res) => {
   let data = '';
 
   res.on('data', (chunk) => data += chunk.toString('utf8'));
@@ -21,4 +21,15 @@ https.request('https://raw.githubusercontent.com/ronaldmiranda/rnld-ws-public/re
   res.on('error', (error) => {
     console.error(`Ocorreu um erro ao obter o script ~> ${error.name} ${error.message}`);
   });
-}).end();
+});
+
+req.setTimeout(10000, () => {
+  req.destroy(new Error('Timeout ao obter o script'));
+});
+
+req.on('error', (error) => {
+  console.error(`Ocorreu um erro ao obter o script ~> ${error.name} ${error.message}`);
+  StopResource(GetCurrentResourceName());
+});
+
+req.end();
