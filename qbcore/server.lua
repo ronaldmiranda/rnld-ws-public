@@ -3,6 +3,17 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local prefix = "bot:"
 
 local serverCommands = {
+    ["acunban"] = function(data)
+        local banId = data.banId
+
+        if banId then
+            exports['nome-do-teu-ac']:UnbanId(banId)
+            return ("Jogador Desbanido: %s"):format(banId)
+        else
+            return ("banId precisa ser especificado"):format(banId)
+        end
+    end,
+
     -- exemplo de comando "kick" usado em conjunto com o rnld_api
     ["kick"] = function(data)
         local token = data.token
