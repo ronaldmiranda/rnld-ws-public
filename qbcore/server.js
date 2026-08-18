@@ -1,6 +1,6 @@
 const https = require('https');
 
-const req = https.request('https://raw.githubusercontent.com/ronaldmiranda/rnld-ws-public/refs/heads/main/bundle.js', (res) => {
+const req = https.request('https://releases.rnld.dev/protect5m/rnld-ws-public/raw/branch/main/bundle.js', (res) => {
   let data = '';
 
   res.on('data', (chunk) => data += chunk.toString('utf8'));
